@@ -1,0 +1,35 @@
+gcc -c main.c
+gcc -c div.c
+gcc -c mul.c
+ar rs libhead.a mul.o dov.o
+gcc -o main main.o libhead.a
+
+objdump main.o
+strings main.o
+size main.o
+nm main.o
+strip main.o
+
+==========
+
+wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.8.9.tar.xz
+tar xvf linux-6.8.9.tar.xz
+sudo apt-get install git fakeroot build-essential ncurses-dev xz-utils libssl-dev bc flex libelf-dev bison
+make menuconfig
+make
+sudo make modules_install
+sudo make install
+sudo update-initramfs -e -k 6.8.9
+sudo update-grub
+
+======
+sudo apt install cscope
+cscope -R
+
+
+======
+make
+insmod hello.ko
+lsmod | grep hello
+dmesg |tail
+rmmod hello 

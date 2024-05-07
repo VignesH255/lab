@@ -1,0 +1,551 @@
+ex 1------------
+wget https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.0.7.tar.xz 
+tar xvf linux-6.0.7.tar.xz 
+sudo apt-get -f install
+cd linux-6.0.7 
+cp -v /boot/config-$(uname -r) .config 
+make menuconfig 
+make 
+sudo make modules_install 
+sudo make install 
+sudo update-initramfs -c -k 6.0.7 
+sudo update-grub 
+uname -mrs
+
+2------>
+
+gcc –c mul.c
+$ gcc –c div.c
+$ gcc –i main.c
+$ gcc -c mul.c
+• $ gcc -c div.c
+• $ gcc -c main.c
+• $ ar rs libhead.a mul.o div.o
+• $ gcc -o main main.o libhead.a
+• objdump main.o
+• strings main.o
+• size main.o
+• nm main.o
+• strip main.o
+
+gedit reverse.c
+gcc -g reverse.h
+gdb -q a.out
+
+3------------>
+sudo apt install gedit
+sudo apt install cscope
+
+4---------->
+
+$ uname –r Returns a string naming the current system
+$ ls To check object file created or not in the specified directory
+$ sudo dmesg To see the message communicated by modules to the kernel
+$ sudo dmesg –C To clear the communicated message
+$ sudo dmesg To check message communication
+$ lsmod List all the modules running in the systems
+$ sudo insmod simpleDriver.ko
+(here simpleDriverf is user defined file.. ko kernel object file)
+It inserts the simpleDriver module in the list
+$ sudo rmmod simpleDriver.k
+To remove kernel object (now the module is removed successfully
+check the command
+
+hello.c
+#include <linux/module.h>
+#include <linux/init.h>
+/*META INFORMATION*/
+MODULE_LICENSE("GPL");
+MODULE_AUTHOR("Raghav 4 GNU/Linux");
+MODULE_DESCRIPTION("A hello world Linux kernal module");
+// @brief This function is called, when the module is loaded into the kernel
+static int init hello_start(void)
+{
+printk ("Hello, I'm here to help\n");
+return 0;
+}
+// @brief This function is called, when the module is removed into the kernel
+static void exit hello_end(void)
+{
+printk("Goodbye, I hope I was helpful\n");
+}
+module_init(hello_start);
+module_exit(hello_end);
+
+Makefile:
+obj-m += hello.o
+KVERSION = $(shell uname -r)
+all:
+clean:
+make -C /lib/modules/$(KVERSION)/build M=$(PWD) modules
+make -C /lib/modules/$(KVERSION)/build M=$(PWD) clean
+
+5---------->
+// Task Creation
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<FreeRTOS.h>
+#include<task.h>
+void vTask1(void*);
+void vTask2(void*);
+void vApplicationIdleHook(void);
+int main(void)
+{
+xTaskCreate(vTask1,"Task1",1000,NULL,1,NULL);
+xTaskCreate(vTask2,"Task2",1000,NULL,1,NULL);
+vTaskStartScheduler();
+return 0;
+}
+Ashok Kumar K 71812101017
+void vAssertCalled( unsigned long ulLine, const char * const pcFileName )
+{
+taskENTER_CRITICAL();
+{
+printf("[ASSERT] %s:%lu\n", pcFileName, ulLine);
+flush(stdout);
+}
+taskEXIT_CRITICAL();
+exit(-1);
+}
+void vTask1(void* parameter)
+{
+while(1)
+{
+printf("Task1\n");
+sleep(500);
+}
+}
+void vTask2(void* parameter)
+{
+while(1)
+{
+printf("Task2\n");
+sleep(500);
+}
+}
+void vApplicationIdleHook(void)
+{
+//printf("Idle\r\n");
+}
+
+6--------->
+
+// Task Scheduling using Round Robin algorithm
+#include <stdio.h>
+#include <stdlib.h>
+#include <FreeRTOS.h>
+#include <task.h>
+#include <timers.h>
+#define TASKSCHEDULER
+#ifdef TASKSCHEDULER
+void vTask1(void*);
+void vTask2(void*);
+void vTask3(void*);
+void vTask4(void*);
+#endif
+void vApplicationIdleHook(void);
+int main(void)
+{
+#ifdef TASKSCHEDULER
+xTaskCreate( vTask1, "Task 1", 1000, NULL, 1, NULL );
+xTaskCreate( vTask2, "Task 2", 1000, NULL, 1, NULL );
+xTaskCreate( vTask3, "Task 3", 1000, NULL, 1, NULL );
+xTaskCreate( vTask4, "Task 4", 1000, NULL, 1, NULL );
+#endif
+vTaskStartScheduler();
+return 0;
+}
+void vAssertCalled( unsigned long ulLine, const char * const pcFileName )
+{
+taskENTER_CRITICAL();
+{
+printf("[ASSERT] %s:%lu\n", pcFileName, ulLine);
+flush(stdout);
+}
+taskEXIT_CRITICAL();
+exit(-1);
+}
+#ifdef TASKSCHEDULER
+void vTask1(void* parameter)
+{
+while(1)
+{
+printf("Task 1\n");
+vTaskDelay(pdMS_TO_TICKS(250));
+}
+}
+void vTask2(void* parameter)
+{
+while(1)
+{
+printf("Task 2\n");
+vTaskDelay(pdMS_TO_TICKS(250));
+}
+}
+void vTask3(void* parameter)
+{
+TickType_t xLastWaketime = xTaskGetTickCount(); while(1)
+{
+printf("Task 3 with 250ms\n");
+vTaskDelayUntil(&xLastWaketime, pdMS_TO_TICKS(250));
+}
+}
+void vTask4(void* parameter)
+{
+TickType_t xLastWaketime = xTaskGetTickCount();
+while(1)
+{
+}
+}
+#endif
+printf("Task 4 with 500ms\n");
+vTaskDelayUntil(&xLastWaketime, pdMS_TO_TICKS(500));
+void vApplicationIdleHook(void)
+{
+// printf("Idle\r\n");
+}
+
+7--------->DEVELOPMENT OF BLUETOOTH INTERFACING USING
+MSP430 LAUNCHPAD
+#define LED RED_LED
+void setup()
+{
+Serial.begin(9600);
+pinMode(2, OUTPUT);
+}
+void loop()
+{
+if (Serial.available())
+{
+char data_received;
+data_received = Serial.read();
+if (data_received == '1')
+{
+digitalWrite(LED, HIGH);
+Serial.write("LED turned ON\n");
+}
+Ashok Kumar K 71812101017
+if (data_received == '2')
+{
+digitalWrite(LED, LOW);
+Serial.write("LED turned OFF\n");
+}
+}
+}
+
+
+
+DEVELOPMENT OF ESP8266 INTERFACING (WIFI) USING
+MSP430 LAUNCHPAD
+
+#define PASS "12345678"
+#define DST_IP "things.ubidots.com"
+#define idvariable "569fc4ba76254229c49896a6"
+int len;
+void setup()
+{
+// Open serial communications and wait for port to open:
+char cmd[254];
+Serial.begin(9600);
+Serial.setTimeout(5000);
+//test if the module is ready
+Serial.println("AT+RST");
+delay(1000);
+if (Serial.find("ready"))
+{
+Serial.println("Module is ready");
+}
+Ashok Kumar K 71812101017
+else
+{
+}
+Serial.println("Module have no response.");
+while (1);
+delay (1000);
+//connect to the wifi
+boolean connected = false;
+for (int i = 0; i < 5; i++)
+{
+if (connectWiFi())
+{
+connected = true;
+break;
+}
+}
+if (!connected) {
+while (1);
+}
+delay(5000);
+Serial.println("AT+CIPMUX=0");
+}
+void loop()
+{
+int value = analogRead(A0); //you can change ir to another pin
+int num=0;
+String var = "{\"value\":"+ String(value) + "}";
+num = var.length();
+String cmd = "AT+CIPSTART=\"TCP\",\"";
+cmd += DST_IP;
+cmd += "\",80";
+Serial.println(cmd);
+if (Serial.find("Error"))
+return;
+len=strlen ("POST /api/v1.6/datasources/");
+len=len+strlen (idvariable);
+len=len+strlen ("/values HTTP/1.1\nContent-Type: application/json\nContent-Length:
+");
+char numlength[4]; // this will hold the length of num which is the length of the JSON
+element
+sprintf(numlength, "%d", num); // saw this clever code off the net; works yay
+len=len+strlen (numlength);
+len=len + num; //fixed length of the string that will print as Content-Length: in the
+POST
+len=len+strlen ("\nX-Auth-Token: ");
+Ashok Kumar K 71812101017
+len=len+strlen (token);
+len=len+strlen ("\nHost: things.ubidots.com\n\n");
+len=len+strlen ("\n\n");
+Serial.print("AT+CIPSEND=");
+Serial.println (len); //length of the entire data POST for the CIPSEND command of
+ESP2866
+//Serial.println(cmd.length());
+if (Serial.find(">"))
+{
+}
+else
+{
+}
+//Serial.print(">");
+Serial.println("AT+CIPCLOSE");
+delay(1000);
+return;
+Serial.print ("POST /api/v1.6/variables/");
+Serial.print (idvariable);
+Serial.print ("/values HTTP/1.1\nContent-Type: application/json\nContent-Length: ");
+Serial.print (num);
+Serial.print ("\nX-Auth-Token: ");
+Serial.print (token);
+Serial.print ("\nHost: things.ubidots.com\n\n");
+Serial.print (var);
+Serial.println ("\n\n");
+delay(9000);
+//Serial.find("+IPD"); clear the input buffer after the web site responds to the POST
+while (Serial.available())
+{
+char c = Serial.read();
+}
+delay(1000);
+}
+boolean connectWiFi()
+{
+Serial.println("AT+CWMODE=1");
+String cmd = "AT+CWJAP=\"";
+cmd += SSID;
+cmd += "\",\"";
+cmd += PASS;
+cmd += "\"";
+Serial.println(cmd);
+delay(2000);
+if (Serial.find("OK"))
+{
+Ashok Kumar K 71812101017
+}
+else
+{
+}
+}
+return true;
+return false;
+
+MULTIPLE LED BLINKING USING TI
+CC3200 LAUNCHPAD
+For Single LED Bulb:
+#define LED 5
+void setup()
+{
+pinMode(LED,OUTPUT);
+}
+void loop()
+{
+digitalWrite(LED, HIGH);
+delay(1000):
+digitalWrite(LED,LOW);
+delay(1000);
+}
+Ashok Kumar K 71812101017
+For Multiple LED Bulb:
+#define RLED 9
+#define GLED 10
+#define YLED 29
+void setup()
+{
+pinMode(RLED,OUTPUT);
+pinMode(GLED,OUTPUT);
+pinMode(YLED,OUTPUT);
+}
+void loop()
+{
+digitalWrite(RLED, HIGH);
+digitalWrite(GLED, HIGH);
+digitalWrite(YLED, HIGH);
+delay(1000):
+digitalWrite(RLED,LOW);
+digitalWrite(GLED,LOW);
+digitalWrite(YLED,LOW);
+delay(1000);
+}
+
+INTERFACING PUSH BUTTON USING TI
+CC3200 LAUNCHPAD
+
+
+const int buttonPin = 8;
+const int ledPin = 2;
+int buttonState = 0;
+void setup()
+{
+pinMode(ledPin,OUTPUT);
+pinMode(buttonPin, INPUT);
+Serial.begin(9600);
+}
+
+void loop()
+{
+buttonState = digitalRead(buttonPin);
+if(buttonState == HIGH)
+{
+}
+else
+{
+}
+}
+digitalWrite(ledPin,HIGH);
+Serial.println(“LEDglows”);
+digitalWrite(ledPin, LOW);
+
+
+DESIGN OF IOT APPLICATION TO SENSE NEARBY OBJECTS
+USING PIR SENSOR WITH TI CC3200 LAUNCHPAD
+
+
+int pir=4;
+int val = LOW;
+void setup()
+{
+pinMode(pir, INPUT);
+Serial.begin(9600);
+}
+void loop() {
+val = digitalRead(pir);
+if (val = = HIGH)
+{
+}
+else
+{
+}
+}
+Serial.println(“Motion Detected”);
+Serial.println(“Motion NOT Detected”);
+
+
+DESIGN OF IOT APPLICATIONS WITH SENSORS TO SCAN
+NETWORKS USING TI CC3200 LAUNCHPAD
+
+#ifndef CC3200R1M1RGC
+// Do not include SPI for CC3200LaunchPad
+#include <SPI.h>
+#endif
+#include <WiFi.h>
+void setup() {
+//Initialize serial and wait for the port to open:
+Serial.begin(115200);
+WiFi.init();
+Serial.println(WiFi.firmwareVersion());
+// Print WiFi MAC address:
+printMacAddress();
+// scan for existing networks:
+Serial.println("Scanning available networks...");
+listNetworks();
+}
+void loop()
+{
+delay (10000);
+// scan for existing networks:
+Serial.println("Scanning available networks...");
+listNetworks();
+
+}
+void printMacAddress()
+{
+// the MAC address of your Wifi
+byte mac[6];
+// print your MAC address:
+WiFi.macAddress(mac);
+Serial.print("MAC: ");
+Serial.print(mac[5], HEX);
+Serial.print(":");
+Serial.print(mac[4], HEX);
+Serial.print(":");
+Serial.print(mac[3], HEX);
+Serial.print(":");
+Serial.print(mac[2], HEX);
+Serial.print(":");
+Serial.print(mac[1], HEX);
+Serial.print(":");
+Serial.println(mac[0], HEX);
+}
+void listNetworks()
+{
+// scan for nearby networks:
+Serial.println("** Scan Networks**");
+int numSsid = WiFi.scanNetworks();
+if (numSsid == -1)
+{
+Serial.println("Couldn't get a wificonnection");
+while (true);
+}
+// print the list of networks seen:
+Serial.print("number of available networks:");
+Serial.println(numSsid);
+// print the network number and name for each network found:
+for (int thisNet = 0; thisNet < numSsid; thisNet++)
+{
+Serial.print(thisNet);
+Serial.print(") ");
+Serial.print(WiFi.SSID(thisNet));
+Serial.print("\tSignal: ");
+Serial.print(WiFi.RSSI(thisNet));
+Serial.print(" dBm");
+Serial.print("\tEncryption: ");
+printEncryptionType(WiFi.encryptionType(thisNet));
+}
+}
+
+void printEncryptionType(int thisType) {
+// read the encryption type and print out the name:
+switch (thisType)
+{
+case ENC_TYPE_WEP:
+Serial.println("WEP");
+break;
+case ENC_TYPE_TKIP:
+Serial.println("WPA");
+break;
+case ENC_TYPE_CCMP:
+Serial.println("WPA2");
+break;
+case ENC_TYPE_NONE:
+Serial.println("None");
+break;
+case ENC_TYPE_AUTO:
+Serial.println("Auto");
+break;
+}
+}
+
+
+
+
+
+
